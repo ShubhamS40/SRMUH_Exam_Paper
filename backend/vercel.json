@@ -11,6 +11,11 @@
         "src": "/(.*)",
         "dest": "/index.js"
       }
-    ]
+    ],
+    "build": {
+      "env": {
+        "PNPM_FLAGS": "--no-frozen-lockfile"
+      }
+    }
   }
   
