@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  password        String
+  email           String
+  registration_no String
+}
+
+model Upload_By_User {
+  id             Int    @id @default(autoincrement())
+  academic_year  String
+  semester       String
+  branch         String
+  specilization  String
+  subject        String
+  exam_type      String
+  fileurl        String
+}
+
+model Branch {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  specializations     BranchSpecialization[] 
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+model Specialization {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  branches            BranchSpecialization[] // Relation to Branch through BranchSpecialization
+  semesters           Semester[]            // Relation to Semester model
+  papers              Paper[]               // Relation to Paper model
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+model BranchSpecialization {
+  branchId            Int
+  specializationId    Int
+  branch              Branch               @relation(fields: [branchId], references: [id])
+  specialization      Specialization       @relation(fields: [specializationId], references: [id])
+  
+  @@id([branchId, specializationId]) // Composite primary key
+}
+
+model Semester {
+  id                  Int                   @id @default(autoincrement())
+  year                Int                   // e.g., 2023
+  number              Int                   // e.g., Semester 1, 2, etc.
+  specializationId    Int
+  specialization      Specialization        @relation(fields: [specializationId], references: [id])
+  exams               Exam[]  
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+model Exam {
+  id                  Int                   @id @default(autoincrement())
+  type                String                // e.g., "MST 1", "MST 2", "End Semester"
+  semester            Semester              @relation(fields: [semesterId], references: [id])
+  semesterId          Int
+  subjects            Subject[]  
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+model Subject {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  exam                Exam                  @relation(fields: [examId], references: [id])
+  examId              Int
+  papers              Paper[]  
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+}
+
+model Paper {
+  id                  Int                   @id @default(autoincrement())
+  title               String                // Paper Title
+  year                Int                   // Paper Year (e.g., 2023)
+  fileUrl             String                // URL to download the file
+  subjectId           Int
+  subject             Subject               @relation(fields: [subjectId], references: [id])
+  specializationId    Int                   @default(1) // Replace 1 with a valid specialization ID
+  specialization      Specialization        @relation(fields: [specializationId], references: [id])
+  examType            String                @default("Default Exam Type") // Replace with an appropriate default
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+
+  @@unique([subjectId, specializationId, examType, year]) // To ensure unique paper for each subject in a specialization
+}
