@@ -5,6 +5,7 @@ const cors = require("cors");
 const multer = require("multer");
 const { createClient } = require("@supabase/supabase-js");
 const dotenv = require("dotenv");
+const serverless = require("serverless-http");
 
 dotenv.config(); // Load environment variables
 
@@ -146,8 +147,6 @@ app.post("/api/create-paper", upload.single("file"), async (req, res) => {
       });
     }
 
-
-
     const paper = await prisma.paper.create({
       data: {
         title: paperTitle, // Use the title passed in `req.body`
@@ -158,8 +157,6 @@ app.post("/api/create-paper", upload.single("file"), async (req, res) => {
         fileUrl: fileUrl,
       },
     });
-    
-    
 
     res.status(201).json({ message: "Paper created successfully!", paper });
   } catch (error) {
@@ -167,7 +164,6 @@ app.post("/api/create-paper", upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Error creating paper data." });
   }
 });
-
 
 // Home route
 app.get("/", (req, res) => {
@@ -323,7 +319,4 @@ app.post("/api/paper", async (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports.handler = serverless(app);
