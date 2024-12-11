@@ -1,0 +1,30 @@
+# Use the official Node.js image (you can also choose the 'slim' variant for a smaller image)
+FROM node:20
+
+# Set a working directory inside the container (avoids working directly in root)
+WORKDIR /app
+
+# Copy the package.json and package-lock.json first to leverage Docker cache for dependencies
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the prisma folder (schema and migrations) into the container
+COPY prisma ./prisma/
+
+# Run prisma generate to generate the Prisma Client
+RUN npx prisma generate
+
+# Run prisma migrate deploy to apply any pending migrations to the database
+RUN npx prisma migrate 
+
+# Copy the rest of the application code (including .env and index.js)
+COPY .env ./
+COPY index.js ./
+
+# Expose the application port
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
