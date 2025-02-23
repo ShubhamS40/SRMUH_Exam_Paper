@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum BtechSpecializationType {
+  CORE
+  AIML
+  DEVOPS
+}
+
+enum LawSpecializationType {
+  BA_LLB
+  BBA_LLB
+  LLB
+}
+
+enum BtechYearType {
+  YEAR_2023
+  YEAR_2024
+  YEAR_2025
+}
+
+enum LawYearType {
+  YEAR_2023
+  YEAR_2024
+  YEAR_2025
+}
+
+enum BtechSemesterType {
+  SEM_1
+  SEM_2
+  SEM_3
+  SEM_4
+  SEM_5
+  SEM_6
+  SEM_7
+  SEM_8
+}
+
+enum LawSemesterType {
+  SEM_1
+  SEM_2
+  SEM_3
+  SEM_4
+  SEM_5
+  SEM_6
+  SEM_7
+  SEM_8
+  SEM_9
+  SEM_10
+}
+
+enum BcaSpecializationType {
+  CORE
+}
+
+enum BcaYearType {
+  YEAR_2023
+  YEAR_2024
+  YEAR_2025
+}
+
+enum BcaSemesterType {
+  SEM_1
+  SEM_2
+  SEM_3
+  SEM_4
+  SEM_5
+  SEM_6
+}
+
+enum BcomSpecializationType {
+  HONS
+  CORE
+}
+
+enum BcomYearType {
+  YEAR_2023
+  YEAR_2024
+  YEAR_2025
+}
+
+enum BcomSemesterType {
+  SEM_1
+  SEM_2
+  SEM_3
+  SEM_4
+  SEM_5
+  SEM_6
+}
+
+enum ExamType {
+  END_TERM
+  MAST_1
+  MAST_2
+}
+
+model Btech {
+  id             String                @id @default(uuid())
+  specialization BtechSpecializationType
+  subject        String
+  year           BtechYearType
+  semester       BtechSemesterType
+  examType       ExamType
+  fileUrl        String
+  createdAt      DateTime             @default(now())
+}
+
+model Law {
+  id             String                @id @default(uuid())
+  specialization LawSpecializationType
+  subject        String
+  year           LawYearType
+  semester       LawSemesterType
+  examType       ExamType
+  fileUrl        String
+  createdAt      DateTime             @default(now())
+}
+
+model Bca {
+  id             String                @id @default(uuid())
+  specialization BcaSpecializationType
+  subject        String
+  year           BcaYearType
+  semester       BcaSemesterType
+  examType       ExamType
+  fileUrl        String
+  createdAt      DateTime             @default(now())
+}
+
+model Bcom {
+  id             String                @id @default(uuid())
+  specialization BcomSpecializationType
+  subject        String
+  year           BcomYearType
+  semester       BcomSemesterType
+  examType       ExamType
+  fileUrl        String
+  createdAt      DateTime             @default(now())
+}
+
+model User {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  registrationNo String   @unique
+  createdAt      DateTime @default(now())
+}

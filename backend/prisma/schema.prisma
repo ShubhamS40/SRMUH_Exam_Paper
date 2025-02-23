@@ -8,12 +8,12 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  name            String
-  password        String
-  email           String
-  registration_no String
+  id             Int     @id @default(autoincrement())
+  name           String
+  email          String  @unique
+  password       String
 }
+
 
 model Upload_By_User {
   id             Int    @id @default(autoincrement())
@@ -45,7 +45,7 @@ model Specialization {
 }
 
 model BranchSpecialization {
-  branchId            Int
+  branchId            Int 
   specializationId    Int
   branch              Branch               @relation(fields: [branchId], references: [id])
   specialization      Specialization       @relation(fields: [specializationId], references: [id])

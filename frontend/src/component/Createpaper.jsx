@@ -21,7 +21,7 @@ const CreatePaper = () => {
   useEffect(() => {
     const getBranch = async () => {
       try {
-        const response = await fetch("http://13.235.72.216:3000/get-branch", {
+        const response = await fetch("http://13.232.59.110:3000/get-branch", {
           method: "GET",
         });
         const result = await response.json();
@@ -33,7 +33,7 @@ const CreatePaper = () => {
 
     const getSpecialization = async () => {
       try {
-        const response = await fetch("http://13.235.72.216:3000/get-specialization", {
+        const response = await fetch("http://13.232.59.110:3000/get-specialization", {
           method: "GET",
         });
         const result = await response.json();
@@ -71,7 +71,7 @@ const CreatePaper = () => {
     });
 
     try {
-      const response = await fetch("http://13.235.72.216:3000/api/create-paper", {
+      const response = await fetch("http://13.232.59.110:3000/api/create-paper", {
         method: "POST",
         body: formDataWithFile,
       });
